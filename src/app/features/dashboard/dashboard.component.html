@@ -1,0 +1,132 @@
+<div class="container py-4">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+      <h4 class="fw-bold mb-0">Application Pipeline</h4>
+      <p class="text-muted small mb-0">Track interviews, offers, and mentor feedback</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon> Add Application
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <mat-card class="p-3 border-start border-4 border-primary">
+        <div class="text-muted small">Total Applied</div>
+        <div class="fs-3 fw-bold">{{ stats().total }}</div>
+      </mat-card>
+    </div>
+    <div class="col-6 col-md-3">
+      <mat-card class="p-3 border-start border-4 border-warning">
+        <div class="text-muted small">Interviews</div>
+        <div class="fs-3 fw-bold text-warning">{{ stats().interview }}</div>
+      </mat-card>
+    </div>
+    <div class="col-6 col-md-3">
+      <mat-card class="p-3 border-start border-4 border-success">
+        <div class="text-muted small">Offers</div>
+        <div class="fs-3 fw-bold text-success">{{ stats().offer }}</div>
+      </mat-card>
+    </div>
+    <div class="col-6 col-md-3">
+      <mat-card class="p-3 border-start border-4 border-danger">
+        <div class="text-muted small">Rejected</div>
+        <div class="fs-3 fw-bold text-danger">{{ stats().rejected }}</div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <mat-card class="p-3 mb-4">
+    <div class="row g-2 align-items-center">
+      <div class="col-md-8">
+        <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+          <mat-label>Search by company, role, or location...</mat-label>
+          <mat-icon matPrefix class="me-2 text-muted">search</mat-icon>
+          <input matInput [formControl]="searchControl">
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+          <mat-label>Filter Status</mat-label>
+          <mat-select [value]="statusFilter()" (selectionChange)="statusFilter.set($event.value)">
+            <mat-option value="ALL">All Statuses</mat-option>
+            <mat-option value="Applied">Applied</mat-option>
+            <mat-option value="Interview">Interview</mat-option>
+            <mat-option value="Offer">Offer</mat-option>
+            <mat-option value="Rejected">Rejected</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Applications Grid -->
+  @if (filteredJobs().length === 0) {
+    <mat-card class="p-5 text-center text-muted">
+      <mat-icon class="fs-1 h-auto w-auto mb-2">folder_open</mat-icon>
+      <h6>No job applications found</h6>
+      <p class="small">Try clearing your filters or click "Add Application" to log a new opportunity.</p>
+    </mat-card>
+  } @else {
+    <div class="row g-3">
+      @for (job of filteredJobs(); track job.id) {
+        <div class="col-md-6 col-lg-4">
+          <mat-card class="p-3 h-100 d-flex flex-column justify-content-between card-hover">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h6 class="fw-bold mb-0">{{ job.position }}</h6>
+                  <div class="text-primary fw-medium small">{{ job.company }}</div>
+                </div>
+                <span class="status-badge" [class]="job.status">{{ job.status }}</span>
+              </div>
+
+              <div class="small text-muted mb-2">
+                <i class="bi bi-geo-alt me-1"></i>{{ job.location }} &bull;
+                <i class="bi bi-currency-rupee ms-1"></i>{{ job.ctcOrSalary }}
+              </div>
+
+              <div class="small text-muted mb-2">
+                Applied: {{ job.appliedDate | date:'mediumDate' }}
+              </div>
+
+              @if (job.notes) {
+                <p class="small bg-light p-2 rounded mb-2 text-secondary">
+                  {{ job.notes }}
+                </p>
+              }
+
+              @if (job.mentorFeedback) {
+                <div class="small bg-info bg-opacity-10 border-start border-3 border-info p-2 rounded mb-2">
+                  <strong>Mentor Note:</strong> {{ job.mentorFeedback }}
+                </div>
+              }
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-2">
+              @if (job.jobUrl) {
+                <a [href]="job.jobUrl" target="_blank" class="small text-decoration-none">
+                  View Posting <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+              } @else {
+                <span></span>
+              }
+
+              <div>
+                <button mat-icon-button color="primary" (click)="openEditDialog(job)" title="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteApplication(job.id)" title="Delete">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      }
+    </div>
+  }
+</div>

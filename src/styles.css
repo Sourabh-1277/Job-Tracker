@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+  height: 100%;
+  background-color: #f4f6f9;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-badge.Applied {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-badge.Interview {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-badge.Offer {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.Rejected {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.card-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.app-navbar {
+  --mat-toolbar-container-background-color: #005cbb;
+  --mat-toolbar-container-text-color: #ffffff;
+  background-color: #005cbb !important;
+  color: #ffffff !important;
+}
+
+.app-navbar .mat-mdc-button,
+.app-navbar .mat-icon {
+  color: #ffffff !important;
+}
